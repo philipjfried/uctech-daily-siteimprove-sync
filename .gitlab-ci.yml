@@ -1,0 +1,20 @@
+image: samerali/drupal-terminus:latest
+
+variables:
+  GIT_SSL_NO_VERIFY: "true"
+
+stages:
+  - daily
+  - build
+  - test
+  - deploy
+
+sync_live_uctech_for_siteimprove_crawl:
+  stage: daily
+  script:
+    - "cd /home/wodby/vendor/pantheon-systems/terminus/bin &&
+         php terminus auth:login --machine-token=$PANTHEON_TOKEN &&
+         php terminus multidev:delete uctech-ucsb-edu-v04.siteimprove --delete-branch --yes && 
+         php terminus multidev:create uctech-ucsb-edu-v04.live siteimprove
+      "
+  allow_failure: true
